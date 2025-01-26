@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - ./static:/app/static
+    environment:
+      DJANGO_SETTINGS_MODULE: 'core.settings'
+      CELERY_BROKER_URL: 'redis://redis:6379/0'
+    command: python manage.py runserver 0.0.0.0:8080
+    depends_on:
+      - redis
+      - postgres
+      - celery_worker
+
+  redis:
+    image: redis:alpine
+    container_name: redis-server
+    restart: always
+    expose:
+      - "6379"
+
+  postgres:
+    image: postgres
+    container_name: genas-postgres
+    environment:
+      POSTGRES_USER: genas
+      POSTGRES_PASSWORD: genas
+      POSTGRES_DB: genas
+    command: [
+      "-c", "ssl=on",
+      "-c", "ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem",
+      "-c", "ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key"
+    ]
+    ports:
+      - 5432:5432

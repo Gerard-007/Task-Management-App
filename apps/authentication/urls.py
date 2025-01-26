@@ -1,6 +1,9 @@
-from .views import SignupView
+from django.contrib.auth.views import LoginView
+
+from .views import SignupView, VerifyEmail
 from django.urls import path
 
 urlpatterns = [
     path("signup/", SignupView.as_view(), name="signup"),
+    path("email_verify/", VerifyEmail.as_view(), name="email_verify"),
 ]

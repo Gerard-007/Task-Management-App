@@ -23,3 +23,11 @@ class SignupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+
+class SigninSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        max_length=60,
+        min_length=6,
+        write_only=True
+    )

@@ -10,11 +10,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     slug = AutoSlugField(populate_from='username')
     email = models.EmailField(verbose_name=_("Email"), unique=True)
     username = models.CharField(verbose_name=_("Username"), max_length=40, unique=True)
-    last_visit = models.DateTimeField(blank=True, null=True)
+    first_name = models.CharField(verbose_name=_("First name"), max_length=40, blank=True, null=True)
+    last_name = models.CharField(verbose_name=_("Last name"), max_length=40, blank=True, null=True)
+    dob = models.DateTimeField(verbose_name=_("Date of birth"), blank=True, null=True)
+    age = models.IntegerField(verbose_name=_("Age"), blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_company_admin = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 

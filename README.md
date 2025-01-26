@@ -1,5 +1,7 @@
 # Task Management API
 
+![Logo](https://res.cloudinary.com/geetechlab-com/image/upload/v1737920676/githubs/TaskAPI_gyxenf.png)
+
 A Task Management API built using Django to help you efficiently organize and manage tasks. This document provides steps to get the API up and running smoothly using Docker or virtual environments.
 
 ---

@@ -5,9 +5,9 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-jar6)ji)wu3_&q_y)_)&$q@rx0o7rvx#o*rg)n$9d7kq7_!0a1'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -20,9 +20,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Core Apps
     "apps.authentication",
     "apps.tasks",
+
     # Third-party apps
     'rest_framework',
     "corsheaders",

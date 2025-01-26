@@ -5,9 +5,13 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render
 from django.urls import reverse
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
-from apps.authentication.serializers import SignupSerializer, SigninSerializer
+from rest_framework.views import APIView
+
+from apps.authentication.serializers import SignupSerializer, SigninSerializer, EmailVerificationSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from .util import Util
@@ -37,15 +41,10 @@ class SignupView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class SigninView(generics.GenericAPIView):
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = SigninSerializer
-
-    def post(self, request):
-        ...
-
-
-class VerifyEmail(generics.GenericAPIView):
+class VerifyEmail(APIView):
+    serializer_class = EmailVerificationSerializer
+    token_param_config = openapi.Parameter('token', in_=openapi.IN_QUERY, description='Token', type=openapi.TYPE_STRING)
+    @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
         token = request.GET.get("token")
         try:
@@ -68,3 +67,11 @@ class VerifyEmail(generics.GenericAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SigninView(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = SigninSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

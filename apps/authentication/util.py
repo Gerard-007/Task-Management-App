@@ -9,4 +9,4 @@ class Util:
             body=data['email_body'],
             to=[data['email_to']],
         )
-        email.send()
+        email.send(fail_silently=True)

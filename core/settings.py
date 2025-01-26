@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     "corsheaders",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -125,12 +126,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Email Settings...
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_USE_SSL = config('EMAIL_USE_SSL')
 SUPPORT_EMAIL = config('SUPPORT_EMAIL')
 
 
@@ -147,7 +148,7 @@ REST_FRAMEWORK = {
     ],
     'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 6
+    'PAGE_SIZE': 10
 }
 
 
@@ -161,4 +162,15 @@ SIMPLE_JWT = {
     'SIGNING_KEY': "os.environ.get('SIGNING_KEY')",
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    }
 }
